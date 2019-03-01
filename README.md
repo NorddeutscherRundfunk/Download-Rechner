@@ -1,7 +1,7 @@
 # Download-Rechner
 Calculates the time to download/copy a file when provided with the respective file size and download/copy rate.
 
-![demo.png](demo.png)
+![demo.PNG](demo.PNG)
 
 It provides some hard coded presets for the download/copy rate:
 
