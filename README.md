@@ -3,7 +3,7 @@ Calculates the time to download/copy a file when provided with the respective fi
 
 ![demo.PNG](demo.PNG)
 
-It provides some hard coded presets for the download/copy rate:
+It provides hard coded download/copy rates for the following technologies:
 
 * XDCAM HD 422
 * Ethernet 100MBit/s
