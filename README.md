@@ -1,6 +1,8 @@
 # Download-Rechner
 Calculates the time to download/copy a file when provided with the respective file size and download/copy rate.
 
+![demo.png](demo.png)
+
 It provides some hard coded presets for the download/copy rate:
 
 * XDCAM HD 422
