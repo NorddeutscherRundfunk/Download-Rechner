@@ -19,7 +19,7 @@
 #include <EditConstants.au3>
 #include <ButtonConstants.au3>
 #include <Date.au3>
-#include <TrayCox.au3> ; source: https://github.com/SimpelMe/TrayCox
+#include "udf/TrayCox/TrayCox.au3" ; source: https://github.com/SimpelMe/TrayCox
 
 Global $iDecimal = 2	; number of decimal places
 Global $fgRR =""
