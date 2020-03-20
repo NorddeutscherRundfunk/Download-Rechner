@@ -22,9 +22,6 @@
 #include "udf/TrayCox/TrayCox.au3" ; source: https://github.com/SimpelMe/TrayCox
 
 Global $iDecimal = 2	; number of decimal places
-Global $fgRR =""
-Global $tRR =""
-Global $dRR = ""
 
 GUICreate("Download-Rechner",460,290)
 GUICtrlCreateLabel("File-Grösse:",10,8,80,20)
@@ -164,7 +161,11 @@ Func Preset()
 EndFunc
 
 Func Berechnen()
-	Local $osRR
+	Local $osRR ; factor win/osx
+	Local $fgRR ; size in bit
+	Local $tRR ; transfer rate
+	Local $dRR ; download time as integer
+
 	If GUICtrlRead($osw) = 1 Then						;OS: 1024 for Windows or 1000 for OSX
 		$osRR = 1024
 	ElseIf GUICtrlRead($osa) = 1 Then
