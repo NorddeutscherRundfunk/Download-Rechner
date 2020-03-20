@@ -6,7 +6,7 @@
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_CompanyName=Norddeutscher Rundfunk
 #AutoIt3Wrapper_Res_LegalCopyright=Conrad Zelck
-#AutoIt3Wrapper_Res_SaveSource=y
+#AutoIt3Wrapper_Res_SaveSource=p
 #AutoIt3Wrapper_Res_Language=1031
 #AutoIt3Wrapper_Res_Field=Copyright|Conrad Zelck
 #AutoIt3Wrapper_Res_Field=Compile Date|%date% %time%
@@ -90,18 +90,16 @@ GUICtrlSetState($fggb, $GUI_CHECKED)
 GUICtrlSetState($tmb, $GUI_CHECKED)
 GUICtrlSetState($osw, $GUI_CHECKED)
 
-Local $msg
 While 1
-	$msg = GUIGetMsg()
-	Select
-		Case $msg = $GUI_EVENT_CLOSE
+	Switch GUIGetMsg()
+		Case $GUI_EVENT_CLOSE
 			Exit
-		Case $msg = $Berechnen_Button
+		Case $Berechnen_Button
 			Berechnen()
-		Case $msg = $g_hPreset
+		Case $g_hPreset
 			Preset()
-			ControlClick("", "", $Berechnen_Button)
-	EndSelect
+			Berechnen()
+	EndSwitch
 WEnd
 
 Func MY_WM_COMMAND($hWnd, $iMsg, $wParam, $lParam)	; only allow numbers
