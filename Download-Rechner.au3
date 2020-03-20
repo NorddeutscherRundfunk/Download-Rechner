@@ -45,10 +45,12 @@ Global $fgkb = GUICtrlCreateRadio("KB",280,5)
 Global $fgmb = GUICtrlCreateRadio("MB",320,5)
 Global $fggb = GUICtrlCreateRadio("GB",360,5)
 Global $fgtb = GUICtrlCreateRadio("TB",400,5)
+GUICtrlSetState($fggb, $GUI_CHECKED)
 
 GUIStartGroup()
 Global $osw = GUICtrlCreateRadio("Windows",245,35)
 Global $osa = GUICtrlCreateRadio("Apple",320,35)
+GUICtrlSetState($osw, $GUI_CHECKED)
 
 GUIStartGroup()
 Global $tb = GUICtrlCreateRadio("bit/s",245,65)
@@ -68,6 +70,7 @@ Global $tgib = GUICtrlCreateRadio("Gibit/s",405,125)
 Global $tkiby = GUICtrlCreateRadio("KiB/s",295,155)
 Global $tmiby = GUICtrlCreateRadio("MiB/s",350,155)
 Global $tgiby = GUICtrlCreateRadio("GiB/s",405,155)
+GUICtrlSetState($tmb, $GUI_CHECKED)
 
 ; hard coded presets
 Global $g_aPresets = [["XDCAM HD 422", "60.15", "tmb"],["Audio 48kHz 24bit Stereo", "2304", "tkb"], ["MG-copy Transfer-MAC", "75", "tmby"], ["Ethernet 100MBit/s", "94", "tmb"], ["Ethernet 1GBit/s", "940", "tmb"], ["FireWire 400", "240", "tmb"], ["FireWire 800", "480", "tmb"], _
@@ -81,9 +84,6 @@ Global $g_hPreset = GUICtrlCreateCombo("", 85,257,150,20)
 GUICtrlSetData($g_hPreset, $g_sPresetListe)
 
 GUISetState(@SW_SHOW)
-GUICtrlSetState($fggb, $GUI_CHECKED)
-GUICtrlSetState($tmb, $GUI_CHECKED)
-GUICtrlSetState($osw, $GUI_CHECKED)
 
 While 1
 	Switch GUIGetMsg()
