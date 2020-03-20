@@ -161,63 +161,58 @@ Func Preset()
 EndFunc
 
 Func Berechnen()
-	Local $osRR ; factor win/osx
-	Local $fgRR ; size in bit
-	Local $tRR ; transfer rate
-	Local $dRR ; download time as integer
+	Local $osRR = 1024 ; factor win/osx
+	Local $fgRR = GUICtrlRead($fg) ; size in bit
+	Local $tRR = GUICtrlRead($t) ; transfer rate
 
-	If GUICtrlRead($osw) = $GUI_CHECKED Then						;OS: 1024 for Windows or 1000 for OSX
-		$osRR = 1024
-	Else
-		$osRR = 1000
-	EndIf
+	If GUICtrlRead($osa) = $GUI_CHECKED Then $osRR = 1000 ;OS: 1024 for Windows or 1000 for OSX
 
-	If GUICtrlRead($fgb) = $GUI_CHECKED Then						;file size to byte
-		$fgRR = GUICtrlRead($fg)
+	If GUICtrlRead($fgb) = $GUI_CHECKED Then			;file size to byte
+		; do nothing
 	ElseIf GUICtrlRead($fgkb) = $GUI_CHECKED Then
-		$fgRR = GUICtrlRead($fg) * $osRR
+		$fgRR = $fgRR * $osRR
 	ElseIf GUICtrlRead($fgmb) = $GUI_CHECKED Then
-		$fgRR = GUICtrlRead($fg) * $osRR * $osRR
+		$fgRR = $fgRR * $osRR * $osRR
 	ElseIf GUICtrlRead($fggb) = $GUI_CHECKED Then
-		$fgRR = GUICtrlRead($fg) * $osRR * $osRR * $osRR
+		$fgRR = $fgRR * $osRR * $osRR * $osRR
 	ElseIf GUICtrlRead($fgtb) = $GUI_CHECKED Then
-		$fgRR = GUICtrlRead($fg) * $osRR * $osRR * $osRR * $osRR
+		$fgRR = $fgRR * $osRR * $osRR * $osRR * $osRR
 	EndIf
 
 	$fgRR = $fgRR * 8									;byte to bit
 
-	If GUICtrlRead($tb) = $GUI_CHECKED Then						;Transfer-Rate to Bit/s decimal
-		$tRR = GUICtrlRead($t)
+	If GUICtrlRead($tb) = $GUI_CHECKED Then				;Transfer-Rate to Bit/s decimal
+		; do nothing
 	ElseIf GUICtrlRead($tkb) = $GUI_CHECKED Then
-		$tRR = GUICtrlRead($t) * 1000
+		$tRR = $tRR * 1000
 	ElseIf GUICtrlRead($tmb) = $GUI_CHECKED Then
-		$tRR = GUICtrlRead($t) * 1000 * 1000
+		$tRR = $tRR * 1000 * 1000
 	ElseIf GUICtrlRead($tgb) = $GUI_CHECKED Then
-		$tRR = GUICtrlRead($t) * 1000 * 1000 * 1000
-	ElseIf GUICtrlRead($tby) = $GUI_CHECKED Then					;Transfer-Rate to Byte/s and then to Bit/s decimal
-		$tRR = GUICtrlRead($t)
+		$tRR = $tRR * 1000 * 1000 * 1000
+	ElseIf GUICtrlRead($tby) = $GUI_CHECKED Then		;Transfer-Rate to Byte/s and then to Bit/s decimal
+		$tRR = $tRR
 	ElseIf GUICtrlRead($tkby) = $GUI_CHECKED Then
-		$tRR = GUICtrlRead($t) * 1000 * 8
+		$tRR = $tRR * 1000 * 8
 	ElseIf GUICtrlRead($tmby) = $GUI_CHECKED Then
-		$tRR = GUICtrlRead($t) * 1000 * 1000 * 8
+		$tRR = $tRR * 1000 * 1000 * 8
 	ElseIf GUICtrlRead($tgby) = $GUI_CHECKED Then
-		$tRR = GUICtrlRead($t) * 1000 * 1000 * 1000 * 8
-	ElseIf GUICtrlRead($tkib) = $GUI_CHECKED Then					;Transfer-Rate to Bit/s binary
-		$tRR = GUICtrlRead($t) * 1024
+		$tRR = $tRR * 1000 * 1000 * 1000 * 8
+	ElseIf GUICtrlRead($tkib) = $GUI_CHECKED Then		;Transfer-Rate to Bit/s binary
+		$tRR = $tRR * 1024
 	ElseIf GUICtrlRead($tmib) = $GUI_CHECKED Then
-		$tRR = GUICtrlRead($t) * 1024 * 1024
+		$tRR = $tRR * 1024 * 1024
 	ElseIf GUICtrlRead($tgib) = $GUI_CHECKED Then
-		$tRR = GUICtrlRead($t) * 1024 * 1024 * 1024
-	ElseIf GUICtrlRead($tkiby) = $GUI_CHECKED Then					;Transfer-Rate to Byte/s and then to Bit/s binary
-		$tRR = GUICtrlRead($t) * 1024 * 8
+		$tRR = $tRR * 1024 * 1024 * 1024
+	ElseIf GUICtrlRead($tkiby) = $GUI_CHECKED Then		;Transfer-Rate to Byte/s and then to Bit/s binary
+		$tRR = $tRR * 1024 * 8
 	ElseIf GUICtrlRead($tmiby) = $GUI_CHECKED Then
-		$tRR = GUICtrlRead($t) * 1024 * 1024 * 8
+		$tRR = $tRR * 1024 * 1024 * 8
 	ElseIf GUICtrlRead($tgiby) = $GUI_CHECKED Then
-		$tRR = GUICtrlRead($t) * 1024 * 1024 * 1024 * 8
+		$tRR = $tRR * 1024 * 1024 * 1024 * 8
 	EndIf
 
 	If $tRR = 0 Then $tRR = $tRR + 0.000000001			;to avoid division with zero
-	$dRR = $fgRR / $tRR									;calculate download time
+	Local $dRR = $fgRR / $tRR							;calculate download time
 	$dRR = Ceiling($dRR)								;to avoid integer
 
 	Local $sDateTime = _DateAdd("s",$dRR,"2013/01/01 00:00:00")
