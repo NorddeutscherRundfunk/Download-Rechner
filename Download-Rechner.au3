@@ -166,53 +166,53 @@ Func Berechnen()
 	Local $tRR ; transfer rate
 	Local $dRR ; download time as integer
 
-	If GUICtrlRead($osw) = 1 Then						;OS: 1024 for Windows or 1000 for OSX
+	If GUICtrlRead($osw) = $GUI_CHECKED Then						;OS: 1024 for Windows or 1000 for OSX
 		$osRR = 1024
-	ElseIf GUICtrlRead($osa) = 1 Then
+	Else
 		$osRR = 1000
 	EndIf
 
-	If GUICtrlRead($fgb) = 1 Then						;file size to byte
+	If GUICtrlRead($fgb) = $GUI_CHECKED Then						;file size to byte
 		$fgRR = GUICtrlRead($fg)
-	ElseIf GUICtrlRead($fgkb) = 1 Then
+	ElseIf GUICtrlRead($fgkb) = $GUI_CHECKED Then
 		$fgRR = GUICtrlRead($fg) * $osRR
-	ElseIf GUICtrlRead($fgmb) = 1 Then
+	ElseIf GUICtrlRead($fgmb) = $GUI_CHECKED Then
 		$fgRR = GUICtrlRead($fg) * $osRR * $osRR
-	ElseIf GUICtrlRead($fggb) = 1 Then
+	ElseIf GUICtrlRead($fggb) = $GUI_CHECKED Then
 		$fgRR = GUICtrlRead($fg) * $osRR * $osRR * $osRR
-	ElseIf GUICtrlRead($fgtb) = 1 Then
+	ElseIf GUICtrlRead($fgtb) = $GUI_CHECKED Then
 		$fgRR = GUICtrlRead($fg) * $osRR * $osRR * $osRR * $osRR
 	EndIf
 
 	$fgRR = $fgRR * 8									;byte to bit
 
-	If GUICtrlRead($tb) = 1 Then						;Transfer-Rate to Bit/s decimal
+	If GUICtrlRead($tb) = $GUI_CHECKED Then						;Transfer-Rate to Bit/s decimal
 		$tRR = GUICtrlRead($t)
-	ElseIf GUICtrlRead($tkb) = 1 Then
+	ElseIf GUICtrlRead($tkb) = $GUI_CHECKED Then
 		$tRR = GUICtrlRead($t) * 1000
-	ElseIf GUICtrlRead($tmb) = 1 Then
+	ElseIf GUICtrlRead($tmb) = $GUI_CHECKED Then
 		$tRR = GUICtrlRead($t) * 1000 * 1000
-	ElseIf GUICtrlRead($tgb) = 1 Then
+	ElseIf GUICtrlRead($tgb) = $GUI_CHECKED Then
 		$tRR = GUICtrlRead($t) * 1000 * 1000 * 1000
-	ElseIf GUICtrlRead($tby) = 1 Then					;Transfer-Rate to Byte/s and then to Bit/s decimal
+	ElseIf GUICtrlRead($tby) = $GUI_CHECKED Then					;Transfer-Rate to Byte/s and then to Bit/s decimal
 		$tRR = GUICtrlRead($t)
-	ElseIf GUICtrlRead($tkby) = 1 Then
+	ElseIf GUICtrlRead($tkby) = $GUI_CHECKED Then
 		$tRR = GUICtrlRead($t) * 1000 * 8
-	ElseIf GUICtrlRead($tmby) = 1 Then
+	ElseIf GUICtrlRead($tmby) = $GUI_CHECKED Then
 		$tRR = GUICtrlRead($t) * 1000 * 1000 * 8
-	ElseIf GUICtrlRead($tgby) = 1 Then
+	ElseIf GUICtrlRead($tgby) = $GUI_CHECKED Then
 		$tRR = GUICtrlRead($t) * 1000 * 1000 * 1000 * 8
-	ElseIf GUICtrlRead($tkib) = 1 Then					;Transfer-Rate to Bit/s binary
+	ElseIf GUICtrlRead($tkib) = $GUI_CHECKED Then					;Transfer-Rate to Bit/s binary
 		$tRR = GUICtrlRead($t) * 1024
-	ElseIf GUICtrlRead($tmib) = 1 Then
+	ElseIf GUICtrlRead($tmib) = $GUI_CHECKED Then
 		$tRR = GUICtrlRead($t) * 1024 * 1024
-	ElseIf GUICtrlRead($tgib) = 1 Then
+	ElseIf GUICtrlRead($tgib) = $GUI_CHECKED Then
 		$tRR = GUICtrlRead($t) * 1024 * 1024 * 1024
-	ElseIf GUICtrlRead($tkiby) = 1 Then					;Transfer-Rate to Byte/s and then to Bit/s binary
+	ElseIf GUICtrlRead($tkiby) = $GUI_CHECKED Then					;Transfer-Rate to Byte/s and then to Bit/s binary
 		$tRR = GUICtrlRead($t) * 1024 * 8
-	ElseIf GUICtrlRead($tmiby) = 1 Then
+	ElseIf GUICtrlRead($tmiby) = $GUI_CHECKED Then
 		$tRR = GUICtrlRead($t) * 1024 * 1024 * 8
-	ElseIf GUICtrlRead($tgiby) = 1 Then
+	ElseIf GUICtrlRead($tgiby) = $GUI_CHECKED Then
 		$tRR = GUICtrlRead($t) * 1024 * 1024 * 1024 * 8
 	EndIf
 
