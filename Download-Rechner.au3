@@ -34,8 +34,6 @@ GUICtrlCreateLabel("hh:mm:ss",245,223)
 GUICtrlCreateLabel("Preset:",10,260)
 
 Global $fg = GUICtrlCreateInput("",85,5,150,20,$ES_RIGHT)
-GUIRegisterMsg($WM_COMMAND, "MY_WM_COMMAND")	; only allow numbers
-
 Global $t = GUICtrlCreateInput("",85,65,150,20,$ES_RIGHT)
 GUIRegisterMsg($WM_COMMAND, "MY_WM_COMMAND")	; only allow numbers
 
