@@ -6,6 +6,7 @@ Calculates the time to download/copy a file when provided with the respective fi
 It provides hard coded download/copy rates for the following technologies:
 
 * XDCAM HD 422
+* Audio 48kHz 24bit Stereo
 * Ethernet 100MBit/s
 * Ethernet 1GBit/s
 * FireWire 400

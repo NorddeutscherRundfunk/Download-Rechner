@@ -2,7 +2,7 @@
 #AutoIt3Wrapper_Icon=Icons\Download-Rechner.ico
 #AutoIt3Wrapper_Res_Comment=Berechnet mit eingegebener Datenmenge und Datenrate die Kopierzeit.
 #AutoIt3Wrapper_Res_Description=Berechnet mit eingegebener Datenmenge und Datenrate die Kopierzeit.
-#AutoIt3Wrapper_Res_Fileversion=1.0.0.7
+#AutoIt3Wrapper_Res_Fileversion=1.0.0.8
 #AutoIt3Wrapper_Res_Fileversion_AutoIncrement=y
 #AutoIt3Wrapper_Res_CompanyName=Norddeutscher Rundfunk
 #AutoIt3Wrapper_Res_LegalCopyright=Conrad Zelck
@@ -75,7 +75,7 @@ Global $tmiby = GUICtrlCreateRadio("MiB/s",350,155)
 Global $tgiby = GUICtrlCreateRadio("GiB/s",405,155)
 
 ; hard coded presets
-Global $g_aPresets = [["XDCAM HD 422", "60.15", "tmb"], ["MG-copy Transfer-MAC", "75", "tmby"], ["Ethernet 100MBit/s", "94", "tmb"], ["Ethernet 1GBit/s", "940", "tmb"], ["FireWire 400", "240", "tmb"], ["FireWire 800", "480", "tmb"], _
+Global $g_aPresets = [["XDCAM HD 422", "60.15", "tmb"],["Audio 48kHz 24bit Stereo", "2304", "tkb"], ["MG-copy Transfer-MAC", "75", "tmby"], ["Ethernet 100MBit/s", "94", "tmb"], ["Ethernet 1GBit/s", "940", "tmb"], ["FireWire 400", "240", "tmb"], ["FireWire 800", "480", "tmb"], _
 						["Thunderbolt (2)", "1.3", "tgby"], ["Thunderbolt 3", "3", "tgby"], _
 						["USB 1.1", "6.6", "tmb"], ["USB 2.0", "280", "tmb"], ["USB 3.0", "480", "tmby"], ["USB-C (3.1)", "900", "tmby"]]
 Global $g_sPresetListe
@@ -130,6 +130,8 @@ Func Preset()
 		If $sPreset = $g_aPresets[$i][0] Then
 			GUICtrlSetData($t, $g_aPresets[$i][1])
 			Switch $g_aPresets[$i][2]
+				Case "tkb"
+					GUICtrlSetState($tkb, $GUI_CHECKED)
 				Case "tmb"
 					GUICtrlSetState($tmb, $GUI_CHECKED)
 				Case "tmby"
