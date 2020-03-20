@@ -130,14 +130,34 @@ Func Preset()
 		If $sPreset = $g_aPresets[$i][0] Then
 			GUICtrlSetData($t, $g_aPresets[$i][1])
 			Switch $g_aPresets[$i][2]
+				Case "tb"
+					GUICtrlSetState($tb, $GUI_CHECKED)
 				Case "tkb"
 					GUICtrlSetState($tkb, $GUI_CHECKED)
 				Case "tmb"
 					GUICtrlSetState($tmb, $GUI_CHECKED)
+				Case "tgb"
+					GUICtrlSetState($tgb, $GUI_CHECKED)
+				Case "tby"
+					GUICtrlSetState($tby, $GUI_CHECKED)
+				Case "tkby"
+					GUICtrlSetState($tkby, $GUI_CHECKED)
 				Case "tmby"
 					GUICtrlSetState($tmby, $GUI_CHECKED)
 				Case "tgby"
 					GUICtrlSetState($tgby, $GUI_CHECKED)
+				Case "tkib"
+					GUICtrlSetState($tkib, $GUI_CHECKED)
+				Case "tmib"
+					GUICtrlSetState($tmib, $GUI_CHECKED)
+				Case "tgib"
+					GUICtrlSetState($tgib, $GUI_CHECKED)
+				Case "tkiby"
+					GUICtrlSetState($tkiby, $GUI_CHECKED)
+				Case "tmiby"
+					GUICtrlSetState($tmiby, $GUI_CHECKED)
+				Case "tgiby"
+					GUICtrlSetState($tgiby, $GUI_CHECKED)
 			EndSwitch
 			ControlFocus("", "", $fg)
 			ExitLoop
