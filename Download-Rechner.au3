@@ -105,7 +105,9 @@ WEnd
 Func MY_WM_COMMAND($hWnd, $iMsg, $wParam, $lParam)	; only allow numbers
 	#forceref $hWnd, $iMsg, $wParam, $lParam
 	Local $Read_Inputfg = GUICtrlRead($fg)
+	Local $Read_Inputfg_Current = $Read_Inputfg
 	Local $Read_Inputt = GUICtrlRead($t)
+	Local $Read_Inputt_Current = $Read_Inputt
 	If StringRegExp($Read_Inputfg, '[^\d.,-]|([{0-9,1}^\A-])[^\d.,]') Then $Read_Inputfg = StringRegExpReplace($Read_Inputfg, '[^\d.,-]|([{0-9,1}^\A-])[^\d.,]', '\1')
 	If StringRegExp($Read_Inputt, '[^\d.,-]|([{0-9,1}^\A-])[^\d.,]') Then $Read_Inputt = StringRegExpReplace($Read_Inputt, '[^\d.,-]|([{0-9,1}^\A-])[^\d.,]', '\1')
 	$Read_Inputfg = StringRegExpReplace($Read_Inputfg, ',', '.')
@@ -118,8 +120,8 @@ Func MY_WM_COMMAND($hWnd, $iMsg, $wParam, $lParam)	; only allow numbers
 	If $Point2t <> 0 Then $Read_Inputt = StringLeft($Read_Inputt, $Point2t - 1)
 	If $Point1fg <> 0 Then $Read_Inputfg = StringLeft($Read_Inputfg, $Point1fg + $iDecimal)
 	If $Point1t <> 0 Then $Read_Inputt = StringLeft($Read_Inputt, $Point1t + $iDecimal)
-	GUICtrlSetData($fg, $Read_Inputfg)
-	GUICtrlSetData($t, $Read_Inputt)
+	If $Read_Inputfg <> $Read_Inputfg_Current Then GUICtrlSetData($fg, $Read_Inputfg)
+	If $Read_Inputt <> $Read_Inputt_Current Then GUICtrlSetData($t, $Read_Inputt)
 EndFunc
 
 Func Preset()
