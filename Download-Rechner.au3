@@ -99,24 +99,31 @@ WEnd
 
 Func MY_WM_COMMAND($hWnd, $iMsg, $wParam, $lParam)	; only allow numbers
 	#forceref $hWnd, $iMsg, $wParam, $lParam
-	Local $Read_Inputfg = GUICtrlRead($g_idFileSizeInput)
-	Local $Read_Inputfg_Current = $Read_Inputfg
-	Local $Read_Inputt = GUICtrlRead($g_idTransferRateInput)
-	Local $Read_Inputt_Current = $Read_Inputt
-	If StringRegExp($Read_Inputfg, '[^\d.,-]|([{0-9,1}^\A-])[^\d.,]') Then $Read_Inputfg = StringRegExpReplace($Read_Inputfg, '[^\d.,-]|([{0-9,1}^\A-])[^\d.,]', '\1')
-	If StringRegExp($Read_Inputt, '[^\d.,-]|([{0-9,1}^\A-])[^\d.,]') Then $Read_Inputt = StringRegExpReplace($Read_Inputt, '[^\d.,-]|([{0-9,1}^\A-])[^\d.,]', '\1')
-	$Read_Inputfg = StringRegExpReplace($Read_Inputfg, ',', '.')
-	$Read_Inputt = StringRegExpReplace($Read_Inputt, ',', '.')
-	Local $Point1fg = StringInStr($Read_Inputfg, ".", 0)
-	Local $Point1t = StringInStr($Read_Inputt, ".", 0)
-	Local $Point2fg = StringInStr($Read_Inputfg, ".", 0, 2)
-	Local $Point2t = StringInStr($Read_Inputt, ".", 0, 2)
-	If $Point2fg <> 0 Then $Read_Inputfg = StringLeft($Read_Inputfg, $Point2fg - 1)
-	If $Point2t <> 0 Then $Read_Inputt = StringLeft($Read_Inputt, $Point2t - 1)
-	If $Point1fg <> 0 Then $Read_Inputfg = StringLeft($Read_Inputfg, $Point1fg + $g_iDecimal)
-	If $Point1t <> 0 Then $Read_Inputt = StringLeft($Read_Inputt, $Point1t + $g_iDecimal)
-	If $Read_Inputfg <> $Read_Inputfg_Current Then GUICtrlSetData($g_idFileSizeInput, $Read_Inputfg)
-	If $Read_Inputt <> $Read_Inputt_Current Then GUICtrlSetData($g_idTransferRateInput, $Read_Inputt)
+	Local $sFileSize = GUICtrlRead($g_idFileSizeInput)
+	Local $sFileSize_Current = $sFileSize
+	Local $sTransferRate = GUICtrlRead($g_idTransferRateInput)
+	Local $sTransferRate_Current = $sTransferRate
+	; Delete all which is not digit, comma or dot on file size or transfer rate
+	If StringRegExp($sFileSize, '[^\d.,-]|([{0-9,1}^\A-])[^\d.,]') Then $sFileSize = StringRegExpReplace($sFileSize, '[^\d.,-]|([{0-9,1}^\A-])[^\d.,]', '\1')
+	If StringRegExp($sTransferRate, '[^\d.,-]|([{0-9,1}^\A-])[^\d.,]') Then $sTransferRate = StringRegExpReplace($sTransferRate, '[^\d.,-]|([{0-9,1}^\A-])[^\d.,]', '\1')
+	; Replace comma with dot
+	$sFileSize = StringRegExpReplace($sFileSize, ',', '.')
+	$sTransferRate = StringRegExpReplace($sTransferRate, ',', '.')
+	; First decimal point
+	Local $iFirstDecimalPoint_FileSize = StringInStr($sFileSize, ".", 0)
+	Local $iFirstDecimalPoint_TransferRate = StringInStr($sTransferRate, ".", 0)
+	; Possibly second decimal point
+	Local $iSecondDecimalPoint_FileSize = StringInStr($sFileSize, ".", 0, 2)
+	Local $iSecondDecimalPoint_TransferRate = StringInStr($sTransferRate, ".", 0, 2)
+	; If second decimal point then delete it
+	If $iSecondDecimalPoint_FileSize <> 0 Then $sFileSize = StringLeft($sFileSize, $iSecondDecimalPoint_FileSize - 1)
+	If $iSecondDecimalPoint_TransferRate <> 0 Then $sTransferRate = StringLeft($sTransferRate, $iSecondDecimalPoint_TransferRate - 1)
+	; Trim to maximal allowed decimal place
+	If $iFirstDecimalPoint_FileSize <> 0 Then $sFileSize = StringLeft($sFileSize, $iFirstDecimalPoint_FileSize + $g_iDecimal)
+	If $iFirstDecimalPoint_TransferRate <> 0 Then $sTransferRate = StringLeft($sTransferRate, $iFirstDecimalPoint_TransferRate + $g_iDecimal)
+	; Set corrected data back to inputs
+	If $sFileSize <> $sFileSize_Current Then GUICtrlSetData($g_idFileSizeInput, $sFileSize)
+	If $sTransferRate <> $sTransferRate_Current Then GUICtrlSetData($g_idTransferRateInput, $sTransferRate)
 	Berechnen()
 EndFunc
 
