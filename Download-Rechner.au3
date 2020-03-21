@@ -72,6 +72,10 @@ Global $g_idTransferRateScale_kiby = GUICtrlCreateRadio("KiB/s",295,155)
 Global $g_idTransferRateScale_miby = GUICtrlCreateRadio("MiB/s",350,155)
 Global $g_idTransferRateScale_giby = GUICtrlCreateRadio("GiB/s",405,155)
 GUICtrlSetState($g_idTransferRateScale_mb, $GUI_CHECKED)
+; As state is set these are the start values
+Global $g_iPotencyTransferRate = 2 ; 0=B, 1=K, 2=M, 3=T
+Global $g_iConversionFactor = 1000 ; 1024 binary or 1000 decimal
+Global $g_bByte = False ; if byte then true, if bit then false
 
 ; hard coded presets
 Global $g_aPresets = [["XDCAM HD 422", "60.15", "tmb"],["Audio 48kHz 24bit Stereo", "2304", "tkb"], ["MG-copy Transfer-MAC", "75", "tmby"], ["Ethernet 100MBit/s", "94", "tmb"], ["Ethernet 1GBit/s", "940", "tmb"], ["FireWire 400", "240", "tmb"], ["FireWire 800", "480", "tmb"], _
@@ -126,6 +130,7 @@ Func MY_WM_COMMAND($hWnd, $iMsg, $wParam, $lParam)	; only allow numbers
 	; Set corrected data back to inputs
 	If $sFileSize <> $sFileSize_Current Then GUICtrlSetData($g_idFileSizeInput, $sFileSize)
 	If $sTransferRate <> $sTransferRate_Current Then GUICtrlSetData($g_idTransferRateInput, $sTransferRate)
+
 	Berechnen()
 EndFunc
 
@@ -174,11 +179,12 @@ Func Berechnen()
 	Local $iOsFactor = $BINARY ; factor win/osx
 	Local $iPotencyFileSize
 	Local $iFileSize ; size in bit
-	Local $iTransferRate = GUICtrlRead($g_idTransferRateInput) ; transfer rate
+	Local $iTransferRate
+	Local $iSecondsDownloadTime
 
-	If GUICtrlRead($g_idOS_apple) = $GUI_CHECKED Then $iOsFactor = $DECIMAL ;OS: 1024 for Windows or 1000 for OSX
+	If GUICtrlRead($g_idOS_apple) = $GUI_CHECKED Then $iOsFactor = $DECIMAL ; 1024 for Windows or 1000 for OSX
 
-	If GUICtrlRead($g_idFileSizeScale_b) = $GUI_CHECKED Then			;file size to byte
+	If GUICtrlRead($g_idFileSizeScale_b) = $GUI_CHECKED Then				; file size
 		$iPotencyFileSize = 0
 	ElseIf GUICtrlRead($g_idFileSizeScale_kb) = $GUI_CHECKED Then
 		$iPotencyFileSize = 1
@@ -192,38 +198,62 @@ Func Berechnen()
 
 	$iFileSize = GUICtrlRead($g_idFileSizeInput) * $iOsFactor ^ $iPotencyFileSize * 8
 
-	If GUICtrlRead($g_idTransferRateScale_b) = $GUI_CHECKED Then				;Transfer-Rate to Bit/s decimal
-		; do nothing
+	If GUICtrlRead($g_idTransferRateScale_b) = $GUI_CHECKED Then			; decimal in bit
+		$g_iPotencyTransferRate = 0
+		$g_iConversionFactor = $DECIMAL
 	ElseIf GUICtrlRead($g_idTransferRateScale_kb) = $GUI_CHECKED Then
-		$iTransferRate = $iTransferRate * $DECIMAL
+		$g_iPotencyTransferRate = 1
+		$g_iConversionFactor = $DECIMAL
 	ElseIf GUICtrlRead($g_idTransferRateScale_mb) = $GUI_CHECKED Then
-		$iTransferRate = $iTransferRate * $DECIMAL * $DECIMAL
+		$g_iPotencyTransferRate = 2
+		$g_iConversionFactor = $DECIMAL
 	ElseIf GUICtrlRead($g_idTransferRateScale_gb) = $GUI_CHECKED Then
-		$iTransferRate = $iTransferRate * $DECIMAL * $DECIMAL * $DECIMAL
-	ElseIf GUICtrlRead($g_idTransferRateScale_by) = $GUI_CHECKED Then		;Transfer-Rate to Byte/s and then to Bit/s decimal
-		$iTransferRate = $iTransferRate
+		$g_iPotencyTransferRate = 3
+		$g_iConversionFactor = $DECIMAL
+	ElseIf GUICtrlRead($g_idTransferRateScale_by) = $GUI_CHECKED Then		; decimal in byte
+		$g_iPotencyTransferRate = 0
+		$g_iConversionFactor = $DECIMAL
+		$g_bByte = True
 	ElseIf GUICtrlRead($g_idTransferRateScale_kby) = $GUI_CHECKED Then
-		$iTransferRate = $iTransferRate * $DECIMAL * 8
+		$g_iPotencyTransferRate = 1
+		$g_iConversionFactor = $DECIMAL
+		$g_bByte = True
 	ElseIf GUICtrlRead($g_idTransferRateScale_mby) = $GUI_CHECKED Then
-		$iTransferRate = $iTransferRate * $DECIMAL * $DECIMAL * 8
+		$g_iPotencyTransferRate = 2
+		$g_iConversionFactor = $DECIMAL
+		$g_bByte = True
 	ElseIf GUICtrlRead($g_idTransferRateScale_gby) = $GUI_CHECKED Then
-		$iTransferRate = $iTransferRate * $DECIMAL * $DECIMAL * $DECIMAL * 8
-	ElseIf GUICtrlRead($g_idTransferRateScale_kib) = $GUI_CHECKED Then		;Transfer-Rate to Bit/s binary
-		$iTransferRate = $iTransferRate * $BINARY
+		$g_iPotencyTransferRate = 3
+		$g_iConversionFactor = $DECIMAL
+		$g_bByte = True
+	ElseIf GUICtrlRead($g_idTransferRateScale_kib) = $GUI_CHECKED Then		; binary in bit
+		$g_iPotencyTransferRate = 1
+		$g_iConversionFactor = $BINARY
 	ElseIf GUICtrlRead($g_idTransferRateScale_mib) = $GUI_CHECKED Then
-		$iTransferRate = $iTransferRate * $BINARY * $BINARY
+		$g_iPotencyTransferRate = 2
+		$g_iConversionFactor = $BINARY
 	ElseIf GUICtrlRead($g_idTransferRateScale_gib) = $GUI_CHECKED Then
-		$iTransferRate = $iTransferRate * $BINARY * $BINARY * $BINARY
-	ElseIf GUICtrlRead($g_idTransferRateScale_kiby) = $GUI_CHECKED Then		;Transfer-Rate to Byte/s and then to Bit/s binary
-		$iTransferRate = $iTransferRate * $BINARY * 8
+		$g_iPotencyTransferRate = 3
+		$g_iConversionFactor = $BINARY
+	ElseIf GUICtrlRead($g_idTransferRateScale_kiby) = $GUI_CHECKED Then		; binary in byte
+		$g_iPotencyTransferRate = 1
+		$g_iConversionFactor = $BINARY
+		$g_bByte = True
 	ElseIf GUICtrlRead($g_idTransferRateScale_miby) = $GUI_CHECKED Then
-		$iTransferRate = $iTransferRate * $BINARY * $BINARY * 8
+		$g_iPotencyTransferRate = 2
+		$g_iConversionFactor = $BINARY
+		$g_bByte = True
 	ElseIf GUICtrlRead($g_idTransferRateScale_giby) = $GUI_CHECKED Then
-		$iTransferRate = $iTransferRate * $BINARY * $BINARY * $BINARY * 8
+		$g_iPotencyTransferRate = 3
+		$g_iConversionFactor = $BINARY
+		$g_bByte = True
 	EndIf
 
+	$iTransferRate = GUICtrlRead($g_idTransferRateInput) * $g_iConversionFactor ^ $g_iPotencyTransferRate
+	If $g_bByte Then $iTransferRate *= 8 ; byte to bit
 	If $iTransferRate = 0 Then $iTransferRate = $iTransferRate + 0.000000001			;to avoid division with zero
-	Local $iSecondsDownloadTime = $iFileSize / $iTransferRate							;calculate download time
+
+	$iSecondsDownloadTime = $iFileSize / $iTransferRate									;calculate download time
 	$iSecondsDownloadTime = Ceiling($iSecondsDownloadTime)								;to avoid integer
 
 	Local $sDateTime = _DateAdd("s",$iSecondsDownloadTime,"2013/01/01 00:00:00")
