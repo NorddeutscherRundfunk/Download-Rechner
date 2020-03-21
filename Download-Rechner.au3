@@ -22,6 +22,8 @@
 #include "udf/TrayCox/TrayCox.au3" ; source: https://github.com/SimpelMe/TrayCox
 
 Global $g_iDecimal = 2	; number of decimal places
+Global Const $DECIMAL = 1000
+Global Const $BINARY = 1024
 
 GUICreate("Download-Rechner",460,290)
 GUICtrlCreateLabel("File-Grösse:",10,8,80,20)
@@ -32,7 +34,7 @@ GUICtrlCreateLabel("Preset:",10,260)
 
 Global $g_idFileSizeInput = GUICtrlCreateInput("",85,5,150,20,$ES_RIGHT)
 Global $g_idTransferRateInput = GUICtrlCreateInput("",85,65,150,20,$ES_RIGHT)
-GUIRegisterMsg($WM_COMMAND, "MY_WM_COMMAND")	; only allow numbers
+GUIRegisterMsg($WM_COMMAND, "MY_WM_COMMAND")
 
 Global $g_idDownloadInput = GUICtrlCreateInput("",85,220,150,20,BitOR ($ES_RIGHT,$ES_READONLY))	; output of download time
 
@@ -169,12 +171,12 @@ Func Preset()
 EndFunc
 
 Func Berechnen()
-	Local $iOsFactor = 1024 ; factor win/osx
+	Local $iOsFactor = $BINARY ; factor win/osx
 	Local $iPotencyFileSize
 	Local $iFileSize ; size in bit
 	Local $iTransferRate = GUICtrlRead($g_idTransferRateInput) ; transfer rate
 
-	If GUICtrlRead($g_idOS_apple) = $GUI_CHECKED Then $iOsFactor = 1000 ;OS: 1024 for Windows or 1000 for OSX
+	If GUICtrlRead($g_idOS_apple) = $GUI_CHECKED Then $iOsFactor = $DECIMAL ;OS: 1024 for Windows or 1000 for OSX
 
 	If GUICtrlRead($g_idFileSizeScale_b) = $GUI_CHECKED Then			;file size to byte
 		$iPotencyFileSize = 0
@@ -193,31 +195,31 @@ Func Berechnen()
 	If GUICtrlRead($g_idTransferRateScale_b) = $GUI_CHECKED Then				;Transfer-Rate to Bit/s decimal
 		; do nothing
 	ElseIf GUICtrlRead($g_idTransferRateScale_kb) = $GUI_CHECKED Then
-		$iTransferRate = $iTransferRate * 1000
+		$iTransferRate = $iTransferRate * $DECIMAL
 	ElseIf GUICtrlRead($g_idTransferRateScale_mb) = $GUI_CHECKED Then
-		$iTransferRate = $iTransferRate * 1000 * 1000
+		$iTransferRate = $iTransferRate * $DECIMAL * $DECIMAL
 	ElseIf GUICtrlRead($g_idTransferRateScale_gb) = $GUI_CHECKED Then
-		$iTransferRate = $iTransferRate * 1000 * 1000 * 1000
+		$iTransferRate = $iTransferRate * $DECIMAL * $DECIMAL * $DECIMAL
 	ElseIf GUICtrlRead($g_idTransferRateScale_by) = $GUI_CHECKED Then		;Transfer-Rate to Byte/s and then to Bit/s decimal
 		$iTransferRate = $iTransferRate
 	ElseIf GUICtrlRead($g_idTransferRateScale_kby) = $GUI_CHECKED Then
-		$iTransferRate = $iTransferRate * 1000 * 8
+		$iTransferRate = $iTransferRate * $DECIMAL * 8
 	ElseIf GUICtrlRead($g_idTransferRateScale_mby) = $GUI_CHECKED Then
-		$iTransferRate = $iTransferRate * 1000 * 1000 * 8
+		$iTransferRate = $iTransferRate * $DECIMAL * $DECIMAL * 8
 	ElseIf GUICtrlRead($g_idTransferRateScale_gby) = $GUI_CHECKED Then
-		$iTransferRate = $iTransferRate * 1000 * 1000 * 1000 * 8
+		$iTransferRate = $iTransferRate * $DECIMAL * $DECIMAL * $DECIMAL * 8
 	ElseIf GUICtrlRead($g_idTransferRateScale_kib) = $GUI_CHECKED Then		;Transfer-Rate to Bit/s binary
-		$iTransferRate = $iTransferRate * 1024
+		$iTransferRate = $iTransferRate * $BINARY
 	ElseIf GUICtrlRead($g_idTransferRateScale_mib) = $GUI_CHECKED Then
-		$iTransferRate = $iTransferRate * 1024 * 1024
+		$iTransferRate = $iTransferRate * $BINARY * $BINARY
 	ElseIf GUICtrlRead($g_idTransferRateScale_gib) = $GUI_CHECKED Then
-		$iTransferRate = $iTransferRate * 1024 * 1024 * 1024
+		$iTransferRate = $iTransferRate * $BINARY * $BINARY * $BINARY
 	ElseIf GUICtrlRead($g_idTransferRateScale_kiby) = $GUI_CHECKED Then		;Transfer-Rate to Byte/s and then to Bit/s binary
-		$iTransferRate = $iTransferRate * 1024 * 8
+		$iTransferRate = $iTransferRate * $BINARY * 8
 	ElseIf GUICtrlRead($g_idTransferRateScale_miby) = $GUI_CHECKED Then
-		$iTransferRate = $iTransferRate * 1024 * 1024 * 8
+		$iTransferRate = $iTransferRate * $BINARY * $BINARY * 8
 	ElseIf GUICtrlRead($g_idTransferRateScale_giby) = $GUI_CHECKED Then
-		$iTransferRate = $iTransferRate * 1024 * 1024 * 1024 * 8
+		$iTransferRate = $iTransferRate * $BINARY * $BINARY * $BINARY * 8
 	EndIf
 
 	If $iTransferRate = 0 Then $iTransferRate = $iTransferRate + 0.000000001			;to avoid division with zero
