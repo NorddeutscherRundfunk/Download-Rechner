@@ -24,6 +24,9 @@
 Global $g_iDecimal = 2	; number of decimal places
 Global Const $DECIMAL = 1000
 Global Const $BINARY = 1024
+Global Enum $FILESIZE, $TRANSFERRATE, $DOWNLOADTIME
+Global $g_iCurrentChangedInput
+Global $g_iLastChangedInput
 
 GUICreate("Download-Rechner",460,290)
 GUICtrlCreateLabel("File-Grösse:",10,8,80,20)
@@ -34,8 +37,6 @@ GUICtrlCreateLabel("Preset:",10,260)
 
 Global $g_idFileSizeInput = GUICtrlCreateInput("",85,5,150,20,$ES_RIGHT)
 Global $g_idTransferRateInput = GUICtrlCreateInput("",85,65,150,20,$ES_RIGHT)
-GUIRegisterMsg($WM_COMMAND, "MY_WM_COMMAND")
-
 Global $g_idDownloadInput = GUICtrlCreateInput("",85,220,150,20,BitOR ($ES_RIGHT,$ES_READONLY))	; output of download time
 
 Global $g_idCalculateButton = GUICtrlCreateButton("Berechnen", 85, 185, 150, 25,$BS_DEFPUSHBUTTON)
@@ -90,6 +91,7 @@ Global $g_idPresetCombo = GUICtrlCreateCombo("", 85,257,150,20)
 GUICtrlSetData($g_idPresetCombo, $g_sPresets)
 
 GUISetState(@SW_SHOW)
+GUIRegisterMsg($WM_COMMAND, "MY_WM_COMMAND")
 
 While 1
 	Switch GUIGetMsg()
@@ -130,7 +132,24 @@ Func MY_WM_COMMAND($hWnd, $iMsg, $wParam, $lParam)	; only allow numbers
 	; Set corrected data back to inputs
 	If $sFileSize <> $sFileSize_Current Then GUICtrlSetData($g_idFileSizeInput, $sFileSize)
 	If $sTransferRate <> $sTransferRate_Current Then GUICtrlSetData($g_idTransferRateInput, $sTransferRate)
-
+	Local $iIDFrom = BitAND($wParam, 0xFFFF) ; LoWord - this gives the control which sent the message
+	Switch $iIDFrom
+		Case $g_idFileSizeInput
+			If $g_iCurrentChangedInput <> $FILESIZE Then
+				$g_iLastChangedInput = $g_iCurrentChangedInput
+				$g_iCurrentChangedInput = $FILESIZE
+			EndIf
+		Case $g_idTransferRateInput
+			If $g_iCurrentChangedInput <> $TRANSFERRATE Then
+				$g_iLastChangedInput = $g_iCurrentChangedInput
+				$g_iCurrentChangedInput = $TRANSFERRATE
+			EndIf
+		Case $g_idDownloadInput
+			If $g_iCurrentChangedInput <> $DOWNLOADTIME Then
+				$g_iLastChangedInput = $g_iCurrentChangedInput
+				$g_iCurrentChangedInput = $DOWNLOADTIME
+			EndIf
+	EndSwitch
 	Berechnen()
 EndFunc
 
